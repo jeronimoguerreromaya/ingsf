@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.ingsf.EscuelaController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <VBox spacing="10.0" layoutX="10.0" layoutY="10.0" prefWidth="580.0" AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0">
+
+        <!-- Tabla de Clientes -->
+        <TableView fx:id="tablaClientes" prefHeight="200.0">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="colNombre" text="Nombre" prefWidth="100"/>
+                <TableColumn fx:id="colApellido" text="Apellido" prefWidth="100"/>
+                <TableColumn fx:id="colCedula" text="Cédula" prefWidth="100"/>
+                <TableColumn fx:id="colTelefono" text="Teléfono" prefWidth="100"/>
+                <TableColumn fx:id="colCorreo" text="Correo" prefWidth="130"/>
+            </columns>
+        </TableView>
+
+        <!-- Campos de entrada -->
+        <GridPane hgap="10" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="16.66"/>
+                <ColumnConstraints percentWidth="16.66"/>
+                <ColumnConstraints percentWidth="16.66"/>
+                <ColumnConstraints percentWidth="16.66"/>
+                <ColumnConstraints percentWidth="16.66"/>
+                <ColumnConstraints percentWidth="16.66"/>
+            </columnConstraints>
+
+            <rowConstraints>
+                <RowConstraints minHeight="30"/>
+            </rowConstraints>
+
+            <TextField fx:id="txtNombre" promptText="Nombre" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtApellido" promptText="Apellido" GridPane.columnIndex="1"/>
+            <TextField fx:id="txtCedula" promptText="Cédula" GridPane.columnIndex="2"/>
+            <TextField fx:id="txtTelefono" promptText="Teléfono" GridPane.columnIndex="3"/>
+            <TextField fx:id="txtCorreo" promptText="Correo" GridPane.columnIndex="4"/>
+        </GridPane>
+
+        <!-- Botones CRUD -->
+        <HBox spacing="10">
+            <Button text="Agregar" fx:id="btnAgregar" onAction="#agregarCliente"/>
+            <Button text="Actualizar" fx:id="btnActualizar" onAction="#actualizarCliente"/>
+            <Button text="Eliminar" fx:id="btnEliminar" onAction="#eliminarCliente"/>
+            <Button text="Limpiar" fx:id="btnLimpiar" onAction="#limpiarCampos"/>
+        </HBox>
+    </VBox>
+</AnchorPane>
+

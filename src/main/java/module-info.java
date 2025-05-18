@@ -5,4 +5,5 @@ module com.example.ingsf {
 
     opens com.example.ingsf to javafx.fxml;
     exports com.example.ingsf;
+    opens modelo.ingsf to javafx.base;
 }

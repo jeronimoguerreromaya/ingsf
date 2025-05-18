@@ -1,15 +1,17 @@
 package modelo.ingsf;
 
+
+
 public class Cliente {
-    private int id;
+
     private String nombre;
     private String apellido;
     private String cedula;
     private String telefono;
     private String correo;
 
-    public Cliente(int id, String nombre, String apellido, String cedula, String telefono, String correo) {
-        this.id = id;
+    public Cliente( String nombre, String apellido, String cedula, String telefono, String correo) {
+
         this.nombre = nombre;
         this.apellido = apellido;
         this.cedula = cedula;
@@ -21,9 +23,7 @@ public class Cliente {
         return nombre + " " + apellido;
     }
     // Getters
-    public int getId() {
-        return id;
-    }
+
 
     public String getNombre() {
         return nombre;
@@ -45,11 +45,6 @@ public class Cliente {
         return correo;
     }
 
-    // Setters
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -69,6 +64,11 @@ public class Cliente {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
+
+
+    // Getters y setters
+
+
 
 
 }
