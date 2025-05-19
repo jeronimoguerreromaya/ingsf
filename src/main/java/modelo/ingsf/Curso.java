@@ -1,5 +1,7 @@
 package modelo.ingsf;
 
+import java.util.List;
+
 public class Curso {
     private int id;
     private String nombre;
@@ -55,5 +57,18 @@ public class Curso {
 
     public void setPrecio(double precio) {
         this.precio = precio;
+    }
+    public static Inscripcion Pago(Inscripcion inscripcion,String cedula, String pass){
+            inscripcion.setEstado("SUCCES");
+            inscripcion.getFactura().setEstado("PAGADO");
+            return inscripcion;
+    }
+    public static Inscripcion BuscarInscripcion(List<Inscripcion> inscripcion, String cedula){
+        for(Inscripcion inscripcion1: inscripcion){
+            if(inscripcion1.getCliente().getCedula().equals(cedula)){
+                return inscripcion1;
+            }
+        }
+        return null;
     }
 }

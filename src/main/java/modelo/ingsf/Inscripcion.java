@@ -20,7 +20,7 @@ public class Inscripcion {
         this.fechaInscripcion = LocalDate.now();
         this.cliente = cliente;
         this.curso = curso;
-        this.estado = "Activo";  // Estado inicial
+        this.estado = "En Processo";  // Estado inicial
         this.factura = new Factura(id, cliente, curso);  // Generamos la factura al inscribir
     }
 

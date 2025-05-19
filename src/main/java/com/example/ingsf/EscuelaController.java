@@ -157,9 +157,9 @@ public class EscuelaController {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("VerClienteView.fxml"));
                 Parent root = loader.load();
-                
+
                 VerClienteController controller = loader.getController();
-                
+
                 // Encontrar el curso del cliente
                 String cursoCliente = "";
                 for (Inscripcion ins : inscripcionManager.getInscripciones()) {
@@ -168,15 +168,22 @@ public class EscuelaController {
                         break;
                     }
                 }
-                
-                controller.setDatosCliente(clienteSeleccionado, cursoCliente);
-                
+
+                Inscripcion inscripcionCliente = null;
+                for (Inscripcion ins : inscripcionManager.getInscripciones()) {
+                    if (ins.getCliente().getCedula().equals(clienteSeleccionado.getCedula())) {
+                        inscripcionCliente = ins;
+                        break;
+                    }
+                }
+                controller.setDatosCliente(clienteSeleccionado, cursoCliente, inscripcionCliente);
+
                 Stage stage = new Stage();
                 stage.setTitle("Detalles del Cliente");
                 stage.setScene(new Scene(root));
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
-                
+
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error al cargar la ventana de detalles");
