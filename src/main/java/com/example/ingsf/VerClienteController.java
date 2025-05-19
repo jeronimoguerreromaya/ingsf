@@ -1,13 +1,11 @@
 package com.example.ingsf;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
 import javafx.stage.Modality;
@@ -16,6 +14,8 @@ import modelo.ingsf.Admin;
 import modelo.ingsf.Cliente;
 import modelo.ingsf.Inscripcion;
 import modelo.ingsf.InscripcionManager;
+
+import java.io.IOException;
 import java.util.List;
 
 public class VerClienteController {
@@ -30,6 +30,7 @@ public class VerClienteController {
     private Cliente clienteActual;
     private String cursoActual;
     private Inscripcion inscripcionActual;
+    @FXML private TextArea areaFactura;
 
     public void setDatosCliente(Cliente cliente, String curso, Inscripcion inscripcion) {
         inscripcionManager = new InscripcionManager();
@@ -62,6 +63,8 @@ public class VerClienteController {
                 "\nCurso: " + cursoActual +
                 "\nEstado: " + lblEstadoMatricula.getText());
         alert.showAndWait();
+
+        this.inscripcionActual.getFactura().imprimirFactura();
     }
 
     @FXML
@@ -103,7 +106,7 @@ public class VerClienteController {
                 loginStage.close();
 
                 // Cambiar estado de la inscripción y la factura
-                inscripcionActual.setEstado("SUCCES");
+                inscripcionActual.setEstado("Inscripto");
                 if (inscripcionActual.getFactura() != null) {
                     inscripcionActual.getFactura().setEstado("PAGADO");
                 }
@@ -130,7 +133,18 @@ public class VerClienteController {
 
         loginStage.showAndWait();
     }
+    @FXML
+    public void EstadoRecibo() {
+        this.inscripcionActual.mostarFactura();
+    }
 
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 
     @FXML
     private void cerrarVentana() {

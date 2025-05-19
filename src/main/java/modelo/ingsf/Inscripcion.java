@@ -1,8 +1,10 @@
 package modelo.ingsf;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Inscripcion {
+public class Inscripcion implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int id;
     private LocalDate fechaInscripcion;
     private Cliente cliente;
@@ -15,12 +17,12 @@ public class Inscripcion {
 
     }
 
-    public Inscripcion(int id, Cliente cliente, Curso curso) {
-        this.id = id;
+    public Inscripcion( Cliente cliente, Curso curso) {
+        this.id = Integer.parseInt(cliente.getCedula() + curso.getId());
         this.fechaInscripcion = LocalDate.now();
         this.cliente = cliente;
         this.curso = curso;
-        this.estado = "En Processo";  // Estado inicial
+        this.estado = "Pendiente";  // Estado inicial
         this.factura = new Factura(id, cliente, curso);  // Generamos la factura al inscribir
     }
 
@@ -32,7 +34,9 @@ public class Inscripcion {
         System.out.println("Estado: " + estado);
         factura.mostrarFactura();  // Mostrar también la factura
     }
-
+    public void mostarFactura() {
+        factura.mostrarFactura();
+    }
     public Factura getFactura() {
         return factura;
     }

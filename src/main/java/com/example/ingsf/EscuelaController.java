@@ -41,6 +41,9 @@ public class EscuelaController {
 
         inscripcionManager = new InscripcionManager();
 
+        comboEstado.getItems().addAll("Inscripto", "Pendiente");
+
+
         // Solo números para cédula
         txtCedula.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -87,12 +90,13 @@ public class EscuelaController {
         String correo = txtCorreo.getText().trim();
         String seleccion = combxCurso.getValue();
 
-        if (nombre.isEmpty() || apellido.isEmpty() || cedula.isEmpty() || telefono.isEmpty() || correo.isEmpty() || seleccion.isEmpty()) {
+        if (nombre.isEmpty() || apellido.isEmpty() || cedula.isEmpty() || telefono.isEmpty() || correo.isEmpty() || seleccion == null || seleccion.trim().isEmpty() ) {
             System.out.println("Campos Vacios");
+            mostrarAlerta("Todos los campos son obligatorios.");
         }else{
             if(!validarDocumento(cedula)){
                 Cliente cliente = new Cliente(nombre, apellido, cedula, telefono, correo);
-                Inscripcion inscripcion = new Inscripcion(1, cliente, cursos.get(0));
+                Inscripcion inscripcion = new Inscripcion( cliente, cursos.get(0));
                 if (seleccion.equals("Moto A1")) {
                     inscripcion.setCurso(cursos.get(1));
                 } else if (seleccion.equals("Moto A2")) {
@@ -106,10 +110,13 @@ public class EscuelaController {
                 } else {
                     System.out.println("Categoría no reconocida.");
                 }
+
                 inscripcionManager.agregarInscripcion(inscripcion);
                 clientes.add(inscripcion.getCliente());
+                mostrarAlerta("Registro exitoso");
             }else{
                 System.out.println("Documento ya registrado");
+                mostrarAlerta("Documento ya Registrado.");
             }
         }
     }
@@ -125,6 +132,7 @@ public class EscuelaController {
 
             if (nombre.isEmpty() || apellido.isEmpty()  || telefono.isEmpty() || correo.isEmpty()) {
                 System.out.println("Por favor complete todos los campos.");
+                mostrarAlerta("Campos vacios");
             } else {
                 clienteSeleccionado.setNombre(nombre);
                 clienteSeleccionado.setApellido(apellido);
@@ -135,6 +143,7 @@ public class EscuelaController {
             }
         } else {
             System.out.println("Seleccione un cliente para actualizar.");
+            mostrarAlerta("Seleccione un cliente para actualizar.");
         }
     }
 
@@ -145,8 +154,10 @@ public class EscuelaController {
         if (clienteSeleccionado != null) {
             clientes.remove(clienteSeleccionado);
             inscripcionManager.getInscripciones().removeIf(ins -> ins.getCliente().getCedula().equals(clienteSeleccionado.getCedula()));
+            mostrarAlerta("Registro eliminado.");
         } else {
             System.out.println("Seleccione un cliente para eliminar.");
+            mostrarAlerta("Seleccione un cliente para eliminar.");
         }
     }
 
@@ -190,8 +201,57 @@ public class EscuelaController {
             }
         } else {
             System.out.println("Por favor seleccione un cliente para ver sus detalles");
+            mostrarAlerta("Por favor seleccione un cliente para ver sus detalles");
         }
     }
+    @FXML
+    public void Buscar() {
+        String nombreBusqueda = txtNombre.getText().trim().toLowerCase();
+        String apellidoBusqueda = txtApellido.getText().trim().toLowerCase();
+        String cedulaBusqueda = txtCedula.getText().trim();
+        String telefonoBusqueda = txtTelefono.getText().trim();
+        String correoBusqueda = txtCorreo.getText().trim().toLowerCase();
+        String estadoBusqueda = comboEstado.getValue();
+
+        // Crear una lista temporal para almacenar los resultados filtrados
+        ObservableList<Cliente> clientesFiltrados = FXCollections.observableArrayList();
+
+        // Iterar sobre las inscripciones para obtener clientes con sus estados
+        for (Inscripcion inscripcion : inscripcionManager.getInscripciones()) {
+            Cliente cliente = inscripcion.getCliente();
+            boolean coincide = true;
+
+            // Verificar cada campo solo si se ha ingresado un valor de búsqueda
+            if (!nombreBusqueda.isEmpty() && !cliente.getNombre().toLowerCase().contains(nombreBusqueda)) {
+                coincide = false;
+            }
+            if (!apellidoBusqueda.isEmpty() && !cliente.getApellido().toLowerCase().contains(apellidoBusqueda)) {
+                coincide = false;
+            }
+            if (!cedulaBusqueda.isEmpty() && !cliente.getCedula().contains(cedulaBusqueda)) {
+                coincide = false;
+            }
+            if (!telefonoBusqueda.isEmpty() && !cliente.getTelefono().contains(telefonoBusqueda)) {
+                coincide = false;
+            }
+            if (!correoBusqueda.isEmpty() && !cliente.getCorreo().toLowerCase().contains(correoBusqueda)) {
+                coincide = false;
+            }
+            if (estadoBusqueda != null && !estadoBusqueda.isEmpty() &&
+                    !inscripcion.getEstado().equals(estadoBusqueda)) {
+                coincide = false;
+            }
+
+            // Si todos los criterios coinciden, agregar el cliente a la lista filtrada
+            if (coincide && !clientesFiltrados.contains(cliente)) {
+                clientesFiltrados.add(cliente);
+            }
+        }
+
+        // Actualizar la tabla con los resultados filtrados
+        tablaClientes.setItems(clientesFiltrados);
+    }
+
 
     @FXML
     public void limpiarCampos() {
@@ -201,7 +261,9 @@ public class EscuelaController {
         txtTelefono.clear();
         txtCorreo.clear();
         combxCurso.getSelectionModel().clearSelection();
+        comboEstado.getSelectionModel().clearSelection(); // Agregar esta línea
     }
+
 
     public ArrayList<Curso> getCursos() {
 
@@ -233,5 +295,12 @@ public class EscuelaController {
             }
         }
         return false;
+    }
+    public static void mostrarAlerta(String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle("Alerta");
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 }

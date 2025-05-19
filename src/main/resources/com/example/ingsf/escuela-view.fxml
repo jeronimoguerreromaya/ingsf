@@ -1,63 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane prefHeight="400.0" prefWidth="628.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ingsf.EscuelaController">
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.ingsf.EscuelaController">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
 
-    <VBox layoutX="10.0" layoutY="10.0" prefWidth="580.0" spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+    <!-- Campos existentes -->
+    <GridPane hgap="10" vgap="10">
+        <Label text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="txtNombre" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-        <!-- Tabla de Clientes -->
-        <TableView fx:id="tablaClientes" prefHeight="200.0">
-            <columns>
-                <TableColumn fx:id="colId" prefWidth="50" text="ID" />
-                <TableColumn fx:id="colNombre" prefWidth="100" text="Nombre" />
-                <TableColumn fx:id="colApellido" prefWidth="100" text="Apellido" />
-                <TableColumn fx:id="colCedula" prefWidth="100" text="Cédula" />
-                <TableColumn fx:id="colTelefono" prefWidth="100" text="Teléfono" />
-                <TableColumn fx:id="colCorreo" prefWidth="130" text="Correo" />
-            </columns>
-        </TableView>
+        <Label text="Apellido:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="txtApellido" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-        <!-- Campos de entrada -->
-        <GridPane hgap="10" vgap="10">
-            <columnConstraints>
-                <ColumnConstraints percentWidth="16.66" />
-                <ColumnConstraints percentWidth="16.66" />
-                <ColumnConstraints percentWidth="16.66" />
-                <ColumnConstraints percentWidth="16.66" />
-                <ColumnConstraints percentWidth="16.66" />
-                <ColumnConstraints percentWidth="16.66" />
-            </columnConstraints>
+        <Label text="Cédula:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="txtCedula" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-            <rowConstraints>
-                <RowConstraints minHeight="30" />
-            </rowConstraints>
+        <Label text="Teléfono:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="txtTelefono" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-            <TextField fx:id="txtNombre" promptText="Nombre" GridPane.columnIndex="0" />
-            <TextField fx:id="txtApellido" promptText="Apellido" GridPane.columnIndex="1" />
-            <TextField fx:id="txtCedula" promptText="Cédula" GridPane.columnIndex="2" />
-            <TextField fx:id="txtTelefono" promptText="Teléfono" GridPane.columnIndex="3" />
-            <TextField fx:id="txtCorreo" promptText="Correo" GridPane.columnIndex="4" />
-         <ComboBox fx:id="combxCurso" prefHeight="25.0" prefWidth="116.0" promptText="Cursos" GridPane.columnIndex="5" />
-        </GridPane>
+        <Label text="Correo:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <TextField fx:id="txtCorreo" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-        <!-- Botones CRUD -->
-        <HBox spacing="10">
-            <Button fx:id="btnAgregar" onAction="#agregarCliente" text="Agregar" />
-            <Button fx:id="btnActualizar" onAction="#actualizarCliente" text="Actualizar" />
-            <Button fx:id="btnEliminar" onAction="#eliminarCliente" text="Eliminar" />
-            <Button fx:id="btnLimpiar" onAction="#limpiarCampos" text="Limpiar" />
-         <Button fx:id="btnVer" mnemonicParsing="false" onAction="#verCliente" prefHeight="25.0" prefWidth="51.0" text="Ver" />
-        </HBox>
-    </VBox>
-</AnchorPane>
+        <Label text="Curso:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <ComboBox fx:id="combxCurso" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+        <!-- Agregar el nuevo ComboBox de estado -->
+        <Label text="Estado:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+        <ComboBox fx:id="comboEstado" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+    </GridPane>
+
+    <!-- Botones y otros elementos existentes -->
+    <HBox spacing="10">
+        <Button text="Agregar" onAction="#agregarCliente"/>
+        <Button text="Actualizar" onAction="#actualizarCliente"/>
+        <Button text="Eliminar" onAction="#eliminarCliente"/>
+        <Button text="Ver" onAction="#verCliente"/>
+        <Button text="Buscar" onAction="#Buscar"/>
+        <Button text="Limpiar" onAction="#limpiarCampos"/>
+    </HBox>
+
+    <!-- TableView existente -->
+    <TableView fx:id="tablaClientes" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colNombre" text="Nombre"/>
+            <TableColumn fx:id="colApellido" text="Apellido"/>
+            <TableColumn fx:id="colCedula" text="Cédula"/>
+            <TableColumn fx:id="colTelefono" text="Teléfono"/>
+            <TableColumn fx:id="colCorreo" text="Correo"/>
+        </columns>
+    </TableView>
+</VBox>
