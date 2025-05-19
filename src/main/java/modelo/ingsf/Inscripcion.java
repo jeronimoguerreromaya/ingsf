@@ -10,6 +10,11 @@ public class Inscripcion {
     private String estado;
     private Factura factura;  // Referencia a la factura generada
 
+
+    public  Inscripcion(){
+
+    }
+
     public Inscripcion(int id, Cliente cliente, Curso curso) {
         this.id = id;
         this.fechaInscripcion = LocalDate.now();
@@ -31,6 +36,21 @@ public class Inscripcion {
     public Factura getFactura() {
         return factura;
     }
+    public Cliente getCliente() {
+        return cliente;
+    }
+    public Curso getCurso() {
+        return curso;
+    }
+    public String getEstado() {
+        return estado;
+    }
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
     // Métodos adicionales para cambiar estado, cancelar inscripción, etc.
 }

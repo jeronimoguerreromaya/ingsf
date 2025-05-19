@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ingsf.VerClienteController">
+    <VBox spacing="15" alignment="CENTER" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <GridPane hgap="10" vgap="10">
+            <Label text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblNombre" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="Apellido:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblApellido" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="Cédula:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblCedula" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Label text="Teléfono:" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblTelefono" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+            <Label text="Correo:" GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblCorreo" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+            <Label text="Curso:" GridPane.columnIndex="0" GridPane.rowIndex="5" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblCurso" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+        </GridPane>
+
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Generar Recibo" onAction="#generarRecibo" styleClass="action-button"/>
+            <Button text="Completar Inscripción" onAction="#completarInscripcion" styleClass="action-button"/>
+            <Button text="Cerrar" onAction="#cerrarVentana" styleClass="close-button"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

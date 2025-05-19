@@ -10,6 +10,8 @@ public class Cliente {
     private String telefono;
     private String correo;
 
+    public Cliente() {}
+
     public Cliente( String nombre, String apellido, String cedula, String telefono, String correo) {
 
         this.nombre = nombre;

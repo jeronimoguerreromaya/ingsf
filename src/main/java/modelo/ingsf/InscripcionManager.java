@@ -7,7 +7,7 @@ public class InscripcionManager {
     private static InscripcionManager instancia;
     private List<Inscripcion> inscripciones;
 
-    private InscripcionManager() {
+    public InscripcionManager() {
         inscripciones = new ArrayList<>();
     }
 
@@ -33,5 +33,8 @@ public class InscripcionManager {
         for (Inscripcion inscripcion : inscripciones) {
             inscripcion.getFactura().mostrarFactura();
         }
+    }
+    public List<Inscripcion> getInscripciones() {
+        return inscripciones;
     }
 }
