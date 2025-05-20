@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.ingsf.LoginController"
+      alignment="CENTER"
+      spacing="20.0"
+      style="-fx-background-color: #ecf0f1; -fx-padding: 30;">
+
+    <!-- Título principal -->
+    <Label text="Academia de Conducción"
+           style="-fx-font-size: 22px; -fx-text-fill: #2c3e50; -fx-font-weight: bold;"/>
+
+    <!-- Subtítulo -->
+    <Label text="Inicia sesión para acceder"
+           style="-fx-font-size: 14px; -fx-text-fill: #34495e;"/>
+
+    <!-- Formulario -->
+    <GridPane hgap="10" vgap="10" alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT"/>
+            <ColumnConstraints halignment="LEFT"/>
+        </columnConstraints>
+
+        <Label text="Usuario:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="txtUsuario" promptText="Ingresa tu usuario"
+                   style="-fx-background-radius: 8; -fx-padding: 6;"
+                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Contraseña:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <PasswordField fx:id="txtPassword" promptText="Ingresa tu contraseña"
+                       style="-fx-background-radius: 8; -fx-padding: 6;"
+                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    </GridPane>
+
+    <!-- Botón -->
+    <Button text="Ingresar"
+            onAction="#handleLogin"
+            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 20;"/>
+</VBox>
+

@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class EscuelaController {
@@ -35,11 +36,18 @@ public class EscuelaController {
     @FXML private ComboBox<String> combxCurso;
     public InscripcionManager inscripcionManager;
     private final ObservableList<Cliente> clientes = FXCollections.observableArrayList();
-
     @FXML
     public void initialize() {
 
-        inscripcionManager = new InscripcionManager();
+        inscripcionManager =  InscripcionManager.getInstancia();
+        inscripcionManager.cargarInscripciones();
+
+        System.out.println(inscripcionManager.getInscripciones().size() + " inscripciones encontradas.");
+        List<Inscripcion> listaInscripciones = inscripcionManager.getInscripciones();
+
+        for (Inscripcion inscripcion : listaInscripciones) {
+            clientes.add(inscripcion.getCliente());
+        }
 
         comboEstado.getItems().addAll("Inscripto", "Pendiente");
 
@@ -64,7 +72,7 @@ public class EscuelaController {
 
 
 
-        combxCurso.getItems().addAll("Moto A1","Moto A2","Carro B1","Carro B2","Servicio Publico");
+        combxCurso.getItems().addAll("Moto A1","Moto A2","Carro B1","Carro B2","Moto y carro");
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colApellido.setCellValueFactory(new PropertyValueFactory<>("apellido"));
         colCedula.setCellValueFactory(new PropertyValueFactory<>("cedula"));
@@ -112,6 +120,7 @@ public class EscuelaController {
                 }
 
                 inscripcionManager.agregarInscripcion(inscripcion);
+                inscripcionManager.guardarInscripciones();
                 clientes.add(inscripcion.getCliente());
                 mostrarAlerta("Registro exitoso");
             }else{
@@ -130,31 +139,71 @@ public class EscuelaController {
             String telefono = txtTelefono.getText().trim();
             String correo = txtCorreo.getText().trim();
 
-            if (nombre.isEmpty() || apellido.isEmpty()  || telefono.isEmpty() || correo.isEmpty()) {
-                System.out.println("Por favor complete todos los campos.");
-                mostrarAlerta("Campos vacios");
-            } else {
-                clienteSeleccionado.setNombre(nombre);
-                clienteSeleccionado.setApellido(apellido);
-                clienteSeleccionado.setTelefono(telefono);
-                clienteSeleccionado.setCorreo(correo);
+            boolean cambiosRealizados = false;
 
-                tablaClientes.refresh(); // Refresca la tabla para mostrar cambios
+            if (!nombre.isEmpty() && !nombre.equals(clienteSeleccionado.getNombre())) {
+                clienteSeleccionado.setNombre(nombre);
+                cambiosRealizados = true;
+            }
+            if (!apellido.isEmpty() && !apellido.equals(clienteSeleccionado.getApellido())) {
+                clienteSeleccionado.setApellido(apellido);
+                cambiosRealizados = true;
+            }
+            if (!telefono.isEmpty() && !telefono.equals(clienteSeleccionado.getTelefono())) {
+                clienteSeleccionado.setTelefono(telefono);
+                cambiosRealizados = true;
+            }
+            if (!correo.isEmpty() && !correo.equals(clienteSeleccionado.getCorreo())) {
+                clienteSeleccionado.setCorreo(correo);
+                cambiosRealizados = true;
+            }
+
+            if (cambiosRealizados) {
+                // Actualizar en el manager
+                for (Inscripcion inscripcion : inscripcionManager.getInscripciones()) {
+                    if (inscripcion.getCliente().getCedula().equals(clienteSeleccionado.getCedula())) {
+                        if (!nombre.isEmpty()) inscripcion.getCliente().setNombre(nombre);
+                        if (!apellido.isEmpty()) inscripcion.getCliente().setApellido(apellido);
+                        if (!telefono.isEmpty()) inscripcion.getCliente().setTelefono(telefono);
+                        if (!correo.isEmpty()) inscripcion.getCliente().setCorreo(correo);
+                    }
+                }
+
+                inscripcionManager.guardarInscripciones();
+                tablaClientes.refresh();
+                mostrarAlerta("Cliente actualizado correctamente.");
+            } else {
+                mostrarAlerta("No se realizaron cambios. Todos los campos estaban vacíos o iguales.");
             }
         } else {
-            System.out.println("Seleccione un cliente para actualizar.");
             mostrarAlerta("Seleccione un cliente para actualizar.");
         }
     }
+
 
 
     @FXML
     public void eliminarCliente() {
         Cliente clienteSeleccionado = tablaClientes.getSelectionModel().getSelectedItem();
         if (clienteSeleccionado != null) {
-            clientes.remove(clienteSeleccionado);
-            inscripcionManager.getInscripciones().removeIf(ins -> ins.getCliente().getCedula().equals(clienteSeleccionado.getCedula()));
-            mostrarAlerta("Registro eliminado.");
+            // Confirmación de eliminación (opcional)
+            Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmacion.setTitle("Confirmación");
+            confirmacion.setHeaderText("¿Está seguro de que desea eliminar este cliente?");
+            confirmacion.setContentText("Cliente: " + clienteSeleccionado.getNombre());
+
+            Optional<ButtonType> resultado = confirmacion.showAndWait();
+            if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                // Eliminar el cliente de la lista observable
+                clientes.remove(clienteSeleccionado);
+
+                // Eliminar inscripciones asociadas al cliente por cédula
+                inscripcionManager.getInscripciones().removeIf(ins ->
+                        ins.getCliente().getCedula().equals(clienteSeleccionado.getCedula())
+                );
+                inscripcionManager.guardarInscripciones();
+                mostrarAlerta("Cliente y sus inscripciones eliminados correctamente.");
+            }
         } else {
             System.out.println("Seleccione un cliente para eliminar.");
             mostrarAlerta("Seleccione un cliente para eliminar.");
@@ -187,7 +236,7 @@ public class EscuelaController {
                         break;
                     }
                 }
-                controller.setDatosCliente(clienteSeleccionado, cursoCliente, inscripcionCliente);
+                controller.setDatosCliente(clienteSeleccionado, cursoCliente, inscripcionCliente, inscripcionManager);
 
                 Stage stage = new Stage();
                 stage.setTitle("Detalles del Cliente");
@@ -251,6 +300,41 @@ public class EscuelaController {
         // Actualizar la tabla con los resultados filtrados
         tablaClientes.setItems(clientesFiltrados);
     }
+    @FXML
+    public void verCursos() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ingsf/cursos-view.fxml"));
+            Parent root = loader.load();
+
+            // Obtener el controlador para pasar la lista de cursos
+            VerCursosController controladorCursos = loader.getController();
+
+            // Aquí obtienes la lista real de cursos o una simulada
+            List<Curso> listaDeCursos = obtenerCursos();  // <- Implementa este método o usa tu lista
+
+            // Pasar la lista al controlador
+            controladorCursos.setCursos(listaDeCursos);
+
+            // Crear y mostrar la ventana
+            Stage stage = new Stage();
+            stage.setTitle("Gestión de Cursos");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error al cargar la ventana de cursos: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+
+
+
 
 
     @FXML
@@ -269,10 +353,10 @@ public class EscuelaController {
 
         ArrayList<Curso> cursos = new ArrayList<>();
 
-        Curso curso1 = new Curso(1, "Curso de Conducción Servicio Publico", "Incluye teoría y práctica", 30, 500000);
-        Curso curso2 = new Curso(2, "Curso de Conducción Moto A1", "Para motos hasta 125cc, incluye clases prácticas", 20, 400000);
-        Curso curso3 = new Curso(3, "Curso de Conducción Moto B1", "Para motos mayores a 125cc, clases avanzadas", 25, 450000);
-        Curso curso4 = new Curso(4, "Curso de Conducción Carro A1", "Para automóviles particulares, incluye simulador", 35, 600000);
+        Curso curso1 = new Curso(1, "Curso de Moto y Carro", "Incluye teoría y práctica", 60, 800000);
+        Curso curso2 = new Curso(2, "Curso de Conducción Moto A1", "Para motos hasta 125cc, incluye clases prácticas", 40, 400000);
+        Curso curso3 = new Curso(3, "Curso de Conducción Moto B1", "Para motos mayores a 125cc, clases avanzadas", 45, 450000);
+        Curso curso4 = new Curso(4, "Curso de Conducción Carro A1", "Para automóviles particulares, incluye simulador", 45, 600000);
         Curso curso5 = new Curso(5, "Curso de Conducción Carro B1", "Vehículos de servicio público, clases intensivas", 40, 700000);
 
         cursos.add(curso1);
@@ -283,6 +367,25 @@ public class EscuelaController {
 
         return cursos;
     }
+    private List<Curso> obtenerCursos() {
+        List<Curso> cursos = new ArrayList<>();
+
+
+        Curso curso1 = new Curso(1, "Curso de Moto y Carro", "Incluye teoría y práctica", 60, 800000);
+        Curso curso2 = new Curso(2, "Curso de Conducción Moto A1", "Para motos hasta 125cc, incluye clases prácticas", 40, 400000);
+        Curso curso3 = new Curso(3, "Curso de Conducción Moto B1", "Para motos mayores a 125cc, clases avanzadas", 45, 450000);
+        Curso curso4 = new Curso(4, "Curso de Conducción Carro A1", "Para automóviles particulares, incluye simulador", 45, 600000);
+        Curso curso5 = new Curso(5, "Curso de Conducción Carro B1", "Vehículos de servicio público, clases intensivas", 40, 700000);
+
+        cursos.add(curso1);
+        cursos.add(curso2);
+        cursos.add(curso3);
+        cursos.add(curso4);
+        cursos.add(curso5);
+
+        return cursos;
+    }
+
     public boolean validarDocumento(String documento) {
 
         List<Inscripcion> listaInscripciones = inscripcionManager.getInscripciones();

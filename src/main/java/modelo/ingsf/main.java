@@ -12,6 +12,7 @@ public class main {
         InscripcionManager manager = InscripcionManager.getInstancia();
         manager.cargarInscripciones();
         int x = manager.getInscripciones().size();
+        System.out.println(manager.getInscripciones().size() + " inscripciones encontradas.");
         System.out.println(manager.getInscripciones().get(0).getCliente().getNombre());
 
 

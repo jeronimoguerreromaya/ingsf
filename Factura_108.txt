@@ -1,8 +1,8 @@
 ********** FACTURA **********
-Factura #1231
-Cliente: 123 123
-Curso: Curso de Conducción Servicio Publico
-Precio: $500000.0
+Factura #1083
+Cliente: Jero Gómez
+Curso: Curso de Conducción Moto B1
+Precio: $450000.0
 Fecha: 19/05/2025
 Estado: PAGADO
 ******************************

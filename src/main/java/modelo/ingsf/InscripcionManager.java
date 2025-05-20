@@ -19,7 +19,17 @@ public class InscripcionManager  implements Serializable {
         }
         return instancia;
     }
-
+    public void actualizarInscripcion(Inscripcion newInscripcion){
+        newInscripcion.mostrarDetalle();
+        for(int i=0;i<inscripciones.size();i++){
+            if(inscripciones.get(i).getCliente().getCedula().equals(newInscripcion.getCliente().getCedula())){
+                inscripciones.set(i,newInscripcion);
+                System.out.println("Actualizado");
+                return;
+            }
+        }
+        System.out.println("Error");
+    }
     public void agregarInscripcion(Inscripcion inscripcion) {
         inscripciones.add(inscripcion);
     }
@@ -39,6 +49,9 @@ public class InscripcionManager  implements Serializable {
     }
     public List<Inscripcion> getInscripciones() {
         return inscripciones;
+    }
+    public void  setInscripciones(List<Inscripcion> inscripciones) {
+        this.inscripciones=inscripciones;
     }
 
     // ----- PERSISTENCIA -----

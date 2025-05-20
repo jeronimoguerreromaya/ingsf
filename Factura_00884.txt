@@ -1,8 +1,8 @@
 ********** FACTURA **********
-Factura #1231
-Cliente: 123 123
+Factura #8841
+Cliente: Jui Murillos
 Curso: Curso de Conducción Servicio Publico
 Precio: $500000.0
 Fecha: 19/05/2025
-Estado: PAGADO
+Estado: Pendiente
 ******************************

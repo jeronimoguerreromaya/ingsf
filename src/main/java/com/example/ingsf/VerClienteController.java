@@ -32,8 +32,8 @@ public class VerClienteController {
     private Inscripcion inscripcionActual;
     @FXML private TextArea areaFactura;
 
-    public void setDatosCliente(Cliente cliente, String curso, Inscripcion inscripcion) {
-        inscripcionManager = new InscripcionManager();
+    public void setDatosCliente(Cliente cliente, String curso, Inscripcion inscripcion, InscripcionManager inscripcionManager) {
+        this.inscripcionManager = inscripcionManager;
         this.clienteActual = cliente;
         this.cursoActual = curso;
         this.inscripcionActual = inscripcion;
@@ -105,11 +105,12 @@ public class VerClienteController {
 
                 loginStage.close();
 
-                // Cambiar estado de la inscripción y la factura
+                // Actualizar el estado de inscripción y factura
                 inscripcionActual.setEstado("Inscripto");
                 if (inscripcionActual.getFactura() != null) {
                     inscripcionActual.getFactura().setEstado("PAGADO");
                 }
+                inscripcionManager.guardarInscripciones();
 
                 // Actualizar la vista del estado en pantalla
                 lblEstadoMatricula.setText(inscripcionActual.getEstado());
